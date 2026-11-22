@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <defs>
+    <radialGradient id="tutGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="70%" stop-color="#e0f2fe"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </radialGradient>
+  </defs>
+  <!-- Outer Crest -->
+  <circle cx="50" cy="50" r="48" fill="#0284c7" stroke="#ffffff" stroke-width="3"/>
+  <circle cx="50" cy="50" r="42" fill="none" stroke="#facc15" stroke-width="2" stroke-dasharray="2,2"/>
+  <circle cx="50" cy="50" r="38" fill="#0369a1"/>
+  
+  <!-- Wings / Garland / Book -->
+  <path d="M 50 30 L 65 52 L 50 46 L 35 52 Z" fill="#facc15"/>
+  <path d="M 50 20 L 53 28 L 50 26 L 47 28 Z" fill="#ffffff"/>
+  <!-- Open Book Base -->
+  <path d="M 28 62 C 38 56 46 62 50 66 C 54 62 62 56 72 62 C 70 70 55 72 50 78 C 45 72 30 70 28 62 Z" fill="#ffffff" stroke="#facc15" stroke-width="1.5"/>
+  <path d="M 50 46 L 50 66" stroke="#facc15" stroke-width="2"/>
+  <!-- Flame / Obor -->
+  <path d="M 50 24 C 54 30 58 35 50 46 C 42 35 46 30 50 24 Z" fill="#ef4444"/>
+  <circle cx="50" cy="38" r="3" fill="#facc15"/>
+</svg>
