@@ -1,0 +1,11 @@
+[variables]
+NIXPACKS_PHP_ROOT_DIR = "/app/public"
+NIXPACKS_PHP_FALLBACK_PATH = "/index.php"
+
+[phases.build]
+cmds = [
+    "composer install --no-dev --optimize-autoloader",
+    "mkdir -p database storage/framework/cache/data storage/framework/sessions storage/framework/views storage/logs bootstrap/cache",
+    "touch database/database.sqlite",
+    "chmod -R 777 storage bootstrap/cache database"
+]
