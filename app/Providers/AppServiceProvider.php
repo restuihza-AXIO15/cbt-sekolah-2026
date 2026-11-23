@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -21,6 +22,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Force HTTPS in production / Railway proxy to prevent "Form is not secure" mixed content warnings
+        if (app()->environment('production') || 
+            (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') ||
+            str_contains(config('app.url'), 'https://') ||
+            (isset($_SERVER['HTTP_HOST']) && str_contains($_SERVER['HTTP_HOST'], 'railway.app'))) {
+            URL::forceScheme('https');
+        }
+
         // Auto-migrate & seed database on cloud deployment (Railway/Render) if table does not exist yet
         try {
             if (config('database.default') === 'sqlite') {
