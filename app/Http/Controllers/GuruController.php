@@ -7,6 +7,9 @@ use App\Models\ExamAttempt;
 use App\Models\Question;
 use App\Models\SchoolSetting;
 use App\Models\Subject;
+use App\Services\DocxQuestionParser;
+use App\Services\DocxTemplateGenerator;
+use App\Services\ExcelExportService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -50,7 +53,7 @@ class GuruController extends Controller
     }
 
     /**
-     * Simpan Soal Baru
+     * Simpan Soal Baru Manual
      */
     public function storeSoal(Request $request)
     {
@@ -84,6 +87,72 @@ class GuruController extends Controller
         ]);
 
         return back()->with('success', 'Butir soal berhasil ditambahkan ke Bank Soal.');
+    }
+
+    /**
+     * Unduh Template Naskah Soal Word (.docx)
+     */
+    public function downloadDocxTemplate(DocxTemplateGenerator $generator)
+    {
+        $filePath = $generator->generate();
+        return response()->download($filePath, 'Template_Soal_CBT_2026.docx');
+    }
+
+    /**
+     * Import Butir Soal Langsung dari File Word (.docx)
+     */
+    public function importDocx(Request $request, DocxQuestionParser $parser)
+    {
+        $user = Auth::user();
+        $subject = $user->subject ?: Subject::first();
+
+        if (!$subject) {
+            return back()->with('error', 'Mata pelajaran belum terdaftar.');
+        }
+
+        $request->validate([
+            'file_docx' => 'required|file|mimes:docx|max:10240', // Maks 10MB
+        ], [
+            'file_docx.required' => 'Pilih file Word (.docx) yang ingin diunggah.',
+            'file_docx.mimes' => 'Format file harus berupa Microsoft Word (.docx).',
+            'file_docx.max' => 'Ukuran file maksimal 10 MB.',
+        ]);
+
+        $file = $request->file('file_docx');
+        $result = $parser->parse($file->getRealPath());
+
+        if (!$result['success'] || $result['count'] === 0) {
+            $msg = 'Tidak ada butir soal yang berhasil diparsing dari dokumen.';
+            if (!empty($result['errors'])) {
+                $msg .= ' Kesalahan: ' . implode(' | ', array_slice($result['errors'], 0, 3));
+            }
+            return back()->with('error', $msg);
+        }
+
+        $imported = 0;
+        foreach ($result['questions'] as $q) {
+            Question::create([
+                'subject_id' => $subject->id,
+                'stimulus' => $q['stimulus'],
+                'question_text' => $q['question_text'],
+                'option_a' => $q['option_a'],
+                'option_b' => $q['option_b'],
+                'option_c' => $q['option_c'],
+                'option_d' => $q['option_d'],
+                'option_e' => $q['option_e'] ?? null,
+                'correct_answer' => $q['correct_answer'],
+                'score_weight' => $q['score_weight'],
+                'created_by' => $user->id,
+            ]);
+            $imported++;
+        }
+
+        $successMsg = "Berhasil mengimpor {$imported} butir soal dari dokumen Word ke Bank Soal {$subject->name}!";
+        if (!empty($result['errors'])) {
+            $successMsg .= " (" . count($result['errors']) . " baris diabaikan/tidak lengkap).";
+        }
+
+        return back()->with('success', $successMsg);
     }
 
     /**
@@ -124,5 +193,37 @@ class GuruController extends Controller
         }
 
         return view('guru.rekap_nilai', compact('user', 'setting', 'subject', 'exams', 'selectedExam', 'isCompleted', 'attempts'));
+    }
+
+    /**
+     * Unduh Laporan Nilai Langsung Menjadi File Excel (.xls)
+     */
+    public function exportExcel(Request $request, ExcelExportService $excelService)
+    {
+        $user = Auth::user();
+        $setting = SchoolSetting::current();
+        $exam = Exam::with(['subject.teacher'])->findOrFail($request->exam_id);
+
+        if ($exam->status !== 'completed') {
+            return back()->with('error', 'Nilai belum dapat diunduh karena asesmen belum selesai secara resmi.');
+        }
+
+        $attempts = ExamAttempt::where('exam_id', $exam->id)
+            ->with('user')
+            ->where('status', 'finished')
+            ->orderByDesc('score')
+            ->get();
+
+        return $excelService->exportExamGrades($exam, $attempts, $setting);
+    }
+
+    /**
+     * Unduh Format Template Excel Nilai
+     */
+    public function downloadGradeTemplate(Request $request, ExcelExportService $excelService)
+    {
+        $setting = SchoolSetting::current();
+        $exam = Exam::with('subject')->findOrFail($request->exam_id);
+        return $excelService->downloadGradeTemplate($exam, $setting);
     }
 }

@@ -14,16 +14,33 @@
             </p>
         </div>
 
-        <div class="flex items-center space-x-2">
-            <!-- Tombol Cetak Kartu Peserta (Sesuai Permintaan User) -->
-            <a href="{{ route('admin.cetak-kartu') }}" target="_blank"
-                class="interactive-click px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-lg shadow-sm transition flex items-center space-x-1.5">
-                <i class="fa-solid fa-print"></i>
-                <span>Cetak Kartu Peserta</span>
+        <div class="flex flex-wrap items-center gap-2">
+            <!-- Unduh Excel Data Siswa -->
+            <a href="{{ route('admin.peserta.export-excel') }}" 
+                class="interactive-click px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-lg shadow-sm transition flex items-center space-x-1.5"
+                title="Unduh seluruh data peserta ujian dalam format Excel">
+                <i class="fa-solid fa-file-excel text-sm"></i>
+                <span>Export Excel</span>
             </a>
 
+            <!-- Import Siswa Massal -->
+            <button onclick="document.getElementById('modalImportSiswa').classList.remove('hidden')" 
+                class="interactive-click px-3.5 py-2 bg-slate-700 hover:bg-slate-800 dark:bg-slate-700 dark:hover:bg-slate-600 text-white text-xs font-semibold rounded-lg shadow-sm transition flex items-center space-x-1.5"
+                title="Import data siswa secara massal menggunakan file CSV atau Excel">
+                <i class="fa-solid fa-file-import text-amber-400"></i>
+                <span>Import Siswa</span>
+            </button>
+
+            <!-- Tombol Cetak Kartu Peserta -->
+            <a href="{{ route('admin.cetak-kartu') }}" target="_blank"
+                class="interactive-click px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold rounded-lg shadow-sm transition flex items-center space-x-1.5">
+                <i class="fa-solid fa-print"></i>
+                <span>Cetak Kartu</span>
+            </a>
+
+            <!-- Tambah Siswa Manual -->
             <button onclick="document.getElementById('modalTambahSiswa').classList.remove('hidden')" 
-                class="interactive-click px-4 py-2 bg-[#1e73be] hover:bg-[#155d9b] text-white text-xs font-bold rounded-lg shadow-sm transition flex items-center space-x-1.5">
+                class="interactive-click px-3.5 py-2 bg-[#1e73be] hover:bg-[#155d9b] text-white text-xs font-semibold rounded-lg shadow-sm transition flex items-center space-x-1.5">
                 <i class="fa-solid fa-user-plus"></i>
                 <span>Tambah Siswa</span>
             </button>
@@ -37,6 +54,13 @@
                 <option value="">Semua Kelas</option>
                 @foreach($classes as $c)
                     <option value="{{ $c }}" {{ request('kelas') == $c ? 'selected' : '' }}>{{ $c }}</option>
+                @endforeach
+            </select>
+
+            <select name="ruang" onchange="this.form.submit()" class="text-xs bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 font-medium text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-[#1e73be]">
+                <option value="">Semua Ruang</option>
+                @foreach($rooms as $r)
+                    <option value="{{ $r }}" {{ request('ruang') == $r ? 'selected' : '' }}>{{ $r }}</option>
                 @endforeach
             </select>
 
@@ -197,6 +221,64 @@
                     <button type="submit" 
                         class="interactive-click px-5 py-2 bg-[#1e73be] hover:bg-[#155d9b] text-white rounded-lg font-bold shadow transition">
                         Simpan Siswa
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Import Siswa Massal (CSV / Excel) -->
+    <div id="modalImportSiswa" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-100 dark:border-slate-800">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800 mb-4">
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-950/70 text-amber-700 dark:text-amber-400 flex items-center justify-center">
+                        <i class="fa-solid fa-file-import text-sm"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm">Import Siswa Massal</h3>
+                        <p class="text-[11px] text-slate-500 dark:text-slate-400">Unggah file CSV daftar peserta ujian</p>
+                    </div>
+                </div>
+                <button onclick="document.getElementById('modalImportSiswa').classList.add('hidden')" class="interactive-click text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <div class="mb-4 p-3 bg-blue-50 dark:bg-blue-950/40 rounded-xl border border-blue-200 dark:border-blue-900/60 text-xs">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <span class="font-bold text-blue-900 dark:text-blue-300 block">Butuh contoh format?</span>
+                        <span class="text-[11px] text-blue-700 dark:text-blue-400">Unduh template CSV yang sudah disiapkan sistem.</span>
+                    </div>
+                    <a href="{{ route('admin.peserta.template-csv') }}" 
+                       class="interactive-click px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold text-xs shadow-sm transition flex items-center space-x-1.5 shrink-0">
+                        <i class="fa-solid fa-download text-[11px]"></i>
+                        <span>Template CSV</span>
+                    </a>
+                </div>
+            </div>
+
+            <form action="{{ route('admin.peserta.import-csv') }}" method="POST" enctype="multipart/form-data" class="space-y-4 text-xs">
+                @csrf
+                <div>
+                    <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Pilih File CSV / TXT</label>
+                    <input type="file" name="file_siswa" required accept=".csv,.txt"
+                        class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg text-slate-800 dark:text-slate-200 file:mr-3 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700 focus:outline-none">
+                    <p class="text-[10px] text-slate-400 mt-1">
+                        Format kolom: <span class="font-mono">Nama, Username, Password, NISN, Jenis Kelamin (L/P), Kelas, Ruang, Sesi</span>
+                    </p>
+                </div>
+
+                <div class="flex justify-end space-x-2 pt-3 border-t border-slate-100 dark:border-slate-800">
+                    <button type="button" onclick="document.getElementById('modalImportSiswa').classList.add('hidden')"
+                        class="interactive-click px-4 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg font-semibold transition">
+                        Batal
+                    </button>
+                    <button type="submit" 
+                        class="interactive-click px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold shadow transition flex items-center space-x-1.5">
+                        <i class="fa-solid fa-upload"></i>
+                        <span>Import Sekarang</span>
                     </button>
                 </div>
             </form>

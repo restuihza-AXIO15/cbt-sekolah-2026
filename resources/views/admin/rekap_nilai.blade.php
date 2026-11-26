@@ -19,8 +19,8 @@
         </div>
 
         <!-- Filter Ujian Selector & Export Actions -->
-        <div class="flex items-center space-x-2">
-            <form action="{{ route('admin.rekap-nilai') }}" method="GET" class="flex items-center space-x-2">
+        <div class="flex flex-wrap items-center gap-2">
+            <form action="{{ route('admin.rekap-nilai') }}" method="GET" class="flex items-center">
                 <select name="exam_id" onchange="this.form.submit()" 
                     class="text-xs bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 font-medium text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm">
                     @foreach($exams as $ex)
@@ -31,9 +31,35 @@
                 </select>
             </form>
 
-            <button onclick="window.print()" class="interactive-click px-3.5 py-2 bg-slate-700 hover:bg-slate-800 dark:bg-slate-700 dark:hover:bg-slate-600 text-white rounded-lg text-xs font-semibold shadow-sm transition flex items-center space-x-1.5">
+            @if($selectedExam)
+                <!-- Unduh Nilai Langsung Excel (.xls) Resmi -->
+                <a href="{{ route('admin.rekap-nilai.export-excel', ['exam_id' => $selectedExam->id]) }}" 
+                   class="interactive-click px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold shadow-sm transition flex items-center space-x-1.5"
+                   title="Unduh Nilai Resmi Siswa dalam Format Excel dengan Kop Sekolah">
+                    <i class="fa-solid fa-file-excel text-sm"></i>
+                    <span>Unduh Excel</span>
+                </a>
+
+                <!-- Download Template Format Nilai -->
+                <a href="{{ route('admin.rekap-nilai.template-excel', ['exam_id' => $selectedExam->id]) }}" 
+                   class="interactive-click px-3 py-2 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/60 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-slate-700 rounded-lg text-xs font-semibold shadow-sm transition flex items-center space-x-1.5"
+                   title="Unduh Format Template Lembar Nilai Excel">
+                    <i class="fa-solid fa-file-arrow-down text-emerald-600 dark:text-emerald-400"></i>
+                    <span>Template Nilai</span>
+                </a>
+
+                <!-- Analisis Butir Soal & Daya Pembeda -->
+                <a href="{{ route('admin.analisis-soal', ['exam_id' => $selectedExam->id]) }}" 
+                   class="interactive-click px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-xs font-semibold shadow-sm transition flex items-center space-x-1.5"
+                   title="Buka Analisis Butir Soal & Tingkat Kesukaran">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>Analisis Soal</span>
+                </a>
+            @endif
+
+            <button onclick="window.print()" class="interactive-click px-3 py-2 bg-slate-700 hover:bg-slate-800 dark:bg-slate-700 dark:hover:bg-slate-600 text-white rounded-lg text-xs font-semibold shadow-sm transition flex items-center space-x-1.5">
                 <i class="fa-solid fa-print"></i>
-                <span>Cetak Rekap</span>
+                <span>Cetak</span>
             </button>
         </div>
     </div>

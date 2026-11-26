@@ -240,6 +240,20 @@
                 <span>Rekap dan Laporan Nilai</span>
             </a>
 
+            <div class="px-3 pt-3 pb-1 text-[10px] font-bold uppercase tracking-wider text-slate-400">ANALITIK & KEAMANAN</div>
+
+            <a href="{{ route('admin.analisis-soal') }}" 
+               class="flex items-center space-x-2.5 px-3 py-2.5 rounded-lg hover:bg-slate-800 transition {{ request()->routeIs('admin.analisis-soal*') ? 'sidebar-active' : '' }}">
+                <i class="fa-solid fa-chart-pie w-4 text-center text-purple-400"></i>
+                <span>Analisis Butir Soal</span>
+            </a>
+
+            <a href="{{ route('admin.audit-log') }}" 
+               class="flex items-center space-x-2.5 px-3 py-2.5 rounded-lg hover:bg-slate-800 transition {{ request()->routeIs('admin.audit-log*') ? 'sidebar-active' : '' }}">
+                <i class="fa-solid fa-user-shield w-4 text-center text-amber-400"></i>
+                <span>Audit & Log Keamanan</span>
+            </a>
+
             <div class="px-3 pt-3 pb-1 text-[10px] font-bold uppercase tracking-wider text-slate-400">MANAJEMEN PENGGUNA</div>
 
             <a href="{{ route('admin.pengaturan') }}" 

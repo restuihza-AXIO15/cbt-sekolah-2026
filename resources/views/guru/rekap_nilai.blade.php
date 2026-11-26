@@ -14,8 +14,8 @@
             </p>
         </div>
 
-        <!-- Filter Ujian Selector -->
-        <div class="flex items-center space-x-2">
+        <!-- Filter Ujian Selector & Tombol Unduh Excel -->
+        <div class="flex flex-wrap items-center gap-2">
             <form action="{{ route('guru.rekap-nilai') }}" method="GET" class="flex items-center space-x-2">
                 <select name="exam_id" onchange="this.form.submit()" 
                     class="text-xs bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 font-medium text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-sky-500 shadow-sm">
@@ -28,9 +28,25 @@
             </form>
 
             @if($isCompleted)
+                <!-- Unduh Format Template Excel -->
+                <a href="{{ route('guru.rekap-nilai.template-excel', ['exam_id' => $selectedExam->id]) }}" 
+                    class="interactive-click px-3 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg text-xs font-semibold transition flex items-center space-x-1.5 border border-slate-200 dark:border-slate-700 shadow-sm"
+                    title="Unduh format template penilaian Excel kosong">
+                    <i class="fa-solid fa-file-invoice"></i>
+                    <span>Template Nilai</span>
+                </a>
+
+                <!-- Unduh Nilai Excel Resmi -->
+                <a href="{{ route('guru.rekap-nilai.export-excel', ['exam_id' => $selectedExam->id]) }}" 
+                    class="interactive-click px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold shadow-sm transition flex items-center space-x-1.5"
+                    title="Unduh seluruh rekap nilai lengkap dengan kop sekolah ke format Excel">
+                    <i class="fa-solid fa-file-excel text-sm"></i>
+                    <span>Unduh Excel (.xls)</span>
+                </a>
+
                 <button onclick="window.print()" class="interactive-click px-3.5 py-2 bg-slate-700 hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 text-white rounded-lg text-xs font-semibold shadow-sm transition flex items-center space-x-1.5">
                     <i class="fa-solid fa-print"></i>
-                    <span>Cetak Nilai</span>
+                    <span>Cetak PDF</span>
                 </button>
             @endif
         </div>
