@@ -1,6 +1,6 @@
 @extends('layouts.guru')
 
-@section('title', 'Beranda Guru - Portal CBT 2026')
+@section('title', 'SMKN 15 JAKARTA')
 
 @section('content')
 <div class="space-y-6">
