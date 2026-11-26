@@ -1,6 +1,6 @@
 @extends('layouts.pusmendik')
 
-@section('title', 'Konfirmasi Data Peserta - PUSMENDIK')
+@section('title', 'SMKN 15 JAKARTA')
 
 @section('content')
 <div class="w-full max-w-5xl mx-auto my-auto grid grid-cols-1 md:grid-cols-12 gap-6 items-start animate-fade-in-up">
@@ -15,7 +15,7 @@
                 </div>
                 <div class="overflow-hidden">
                     <span class="text-[10px] font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/60 px-2 py-0.5 rounded">
-                        PESERTA CBT RESMI
+                        PESERTA UJIAN RESMI
                     </span>
                     <h4 class="font-bold text-slate-900 dark:text-white text-base leading-tight mt-1 truncate">{{ $user->name }}</h4>
                     <p class="text-xs text-slate-500 dark:text-slate-400 font-mono mt-0.5">NISN: {{ $user->nisn ?: '-' }}</p>
@@ -24,7 +24,7 @@
 
             <div class="pt-4 space-y-2 text-xs">
                 <div class="flex justify-between text-slate-600 dark:text-slate-300">
-                    <span class="text-slate-400 dark:text-slate-500">Kelas / Rombel:</span>
+                    <span class="text-slate-400 dark:text-slate-500">Kelas / Jurusan:</span>
                     <span class="font-semibold text-slate-800 dark:text-slate-200">{{ $user->class_name ?: 'XII MIPA 1' }}</span>
                 </div>
                 <div class="flex justify-between text-slate-600 dark:text-slate-300">
@@ -52,15 +52,15 @@
             <div class="pt-2 border-t border-amber-200/60 dark:border-amber-800/40 text-[11px] text-amber-800 dark:text-amber-300 space-y-1.5">
                 <div class="flex items-start space-x-1.5">
                     <i class="fa-solid fa-check text-amber-600 dark:text-amber-400 mt-0.5 shrink-0"></i>
-                    <span>Ketikkan Nama Lengkap Anda secara manual.</span>
+                    <span>Ketikkan Nama Lengkap Anda</span>
                 </div>
                 <div class="flex items-start space-x-1.5">
                     <i class="fa-solid fa-check text-amber-600 dark:text-amber-400 mt-0.5 shrink-0"></i>
-                    <span>Pilih Tanggal, Bulan, dan Tahun Lahir Anda secara manual.</span>
+                    <span>Pilih Tanggal, Bulan, dan Tahun Lahir Anda</span>
                 </div>
                 <div class="flex items-start space-x-1.5">
                     <i class="fa-solid fa-check text-amber-600 dark:text-amber-400 mt-0.5 shrink-0"></i>
-                    <span>Masukkan 6 karakter Token yang diumumkan pengawas.</span>
+                    <span>Masukan 6 Digit TOKEN</span>
                 </div>
                 <div class="flex items-start space-x-1.5">
                     <i class="fa-solid fa-clock text-amber-600 dark:text-amber-400 mt-0.5 shrink-0"></i>
@@ -96,7 +96,7 @@
             <div>
                 <label class="block text-xs text-slate-500 dark:text-slate-400 font-medium mb-1">Nama Peserta</label>
                 <div class="text-sm font-semibold text-slate-800 dark:text-slate-200 py-1 border-b border-slate-200 dark:border-slate-700">
-                    {{ $user->name }} - PESERTA TKA
+                    {{ $user->name }} - PESERTA UJIAN SAS
                 </div>
             </div>
 
@@ -119,7 +119,7 @@
             <!-- Input Verifikasi Nama Peserta (INPUT MANUAL - Kosong Awal) -->
             <div class="pt-2">
                 <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                    Nama Peserta <span class="text-red-500">* (Ketikkan nama lengkap Anda secara manual)</span>
+                    Nama Peserta <span class="text-red-500">* (Ketikkan nama lengkap Anda)</span>
                 </label>
                 <input type="text" name="nama_peserta_input" required 
                     value="{{ old('nama_peserta_input', '') }}"
@@ -167,7 +167,7 @@
             <!-- Input Token (INPUT MANUAL - Kosong Awal, Diumumkan oleh Pengawas) -->
             <div>
                 <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                    Token <span class="text-red-500">* (Ketikkan token yang diberikan pengawas ujian)</span>
+                    Token <span class="text-red-500">* (Tuliskan 6 Digit TOKEN)</span>
                 </label>
                 <input type="text" name="token" id="tokenInput" required maxlength="10"
                     value="{{ old('token', '') }}"
