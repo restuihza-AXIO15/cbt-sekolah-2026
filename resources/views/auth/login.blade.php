@@ -1,6 +1,6 @@
 @extends('layouts.pusmendik')
 
-@section('title', 'Login Peserta / Pengguna - CBT PUSMENDIK')
+@section('title', 'SMKN 15 JAKARTA')
 
 @section('content')
 <!-- Card Container dengan Animasi Mulus & Bayangan Latar Belakang (Atmospheric Shadow) -->
@@ -17,7 +17,7 @@
         <div class="mb-6">
             <div class="inline-flex items-center space-x-1.5 px-2.5 py-1 bg-blue-50 dark:bg-blue-950/50 border border-blue-100 dark:border-blue-800/60 rounded-full text-[10px] font-bold text-blue-700 dark:text-blue-400 uppercase tracking-wider mb-2">
                 <i class="fa-solid fa-shield-halved text-[11px]"></i>
-                <span>Portal Resmi Ujian CBT</span>
+                <span>Portal Resmi Ujian SAS</span>
             </div>
             <h2 class="text-xl sm:text-2xl font-bold text-slate-800 dark:text-white tracking-tight">Selamat Datang</h2>
             <p class="text-xs text-slate-500 dark:text-slate-400 mt-1.5 leading-relaxed">
